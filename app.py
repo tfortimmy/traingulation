@@ -1,8 +1,10 @@
+import pdb
 import numpy as np
 import matplotlib.pyplot as plt
+from triangulation.utils import Line, intersection
 
 random_seed = 420
-num_points = 10
+num_points = 5
 
 np.random.seed(random_seed)
 
@@ -16,7 +18,8 @@ del comp, x, y
 
 # convert the distmat into a table where we have the distance, point 1 index, point 2 index
 XX, YY = np.meshgrid(np.arange(num_points), np.arange(num_points))
-dist_table = np.vstack(distmat.ravel(), XX.ravel(), YY.ravel())
+dist_table = np.c_[distmat.ravel(), XX.ravel(), YY.ravel()]
+
 
 del distmat, XX, YY
 
@@ -29,51 +32,41 @@ dist_order = np.argsort(dist_table[:, 0])
 lines = []
 
 for i, (d, x, y) in enumerate(dist_table[dist_order]):
-    pass
 
-plt.scatter(points[:, 0], points[:, 1])
+    print(i, d, x, y)
+
+    # The line going from point x to point y
+    tmp_line = Line(*points[int(x)], *points[int(y)])
+
+    # Are we going to add this one to the list
+    add = True
+
+    # check if it intersects with any of the previous lines
+    for l in lines:
+        if intersection(l, tmp_line):
+
+            print(f'\tIntersects with Line: ({l.x1}, {l.y1}) ({l.x2}, {l.y2})')
+
+            # if it does then we don't want to add it
+            add = False
+            # stop checking as it has failed
+            break
+
+    # if it passed add the line
+    if add:
+        lines.append(tmp_line)
+
+fig, ax = plt.subplots()
+
+ax.scatter(points[:, 0], points[:, 1])
+
+for i, p in enumerate(points):
+    ax.annotate(i, (p[0], p[1]))
+
+for l in lines:
+    ax.plot([l.x1, l.x2], [l.y1, l.y2])
+
+print(points)
+# print(lines)
+
 plt.show()
-
-
-class Line:
-
-    def __init__(self, x1, y1, x2, y2):
-        self.x1, self.y1, self.x2, self.y2 = x1, y1, x2, y2
-
-    @property
-    def length(self):
-        return np.sqrt((self.x1 - self.x2)**2 + (self.y1 - self.y2)**2)
-
-    @property
-    def gradient(self):
-        return (self.x2 - self.x2)/(self.y2 - self.y1)
-
-    @property
-    def intersect(self):
-        return self.y1 - (self.gradient * self.x1)
-
-
-# class Triangle:
-
-#     def __init__(self, p1, p2, p3):
-
-#         self
-
-
-def intersection(l1, l2):
-    """
-    Do these lines intersect
-    """
-
-    # If the gradients are the same then we assume they do not intersect
-    if l1.gradient == l2.gradient:
-        return False
-    else:
-        # Find the intersection point if they were both infinite lines
-        ix = (l1.intersect - l2.intersect) / (l2.gradient - l1.gradient)
-
-        # is the point of intersection on the actual line?
-        if ix > l1.x1 and ix < l1.x2 or ix > l1.x2 and ix < l1.x1:
-            return True
-        else:
-            return False
