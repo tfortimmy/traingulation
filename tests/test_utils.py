@@ -20,7 +20,7 @@ class TestIntersection(TestCase):
             )
         )
 
-    def test_specific(self):
+    def test_is_close(self):
 
         p2 = [0.86816648, 0.62972852]
         p3 = [.35251871, 0.0675376]
