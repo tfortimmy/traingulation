@@ -16,12 +16,16 @@ class Line():
         return (self.y2 - self.y1)/(self.x2 - self.x1)
 
     @property
-    def intersect(self):
+    def intercept(self):
         return self.y1 - (self.gradient * self.x1)
 
     @property
     def to_plot(self):
         return [self.x1, self.x2], [self.y1, self.y2]
+
+    @property
+    def mid_point(self):
+        return (self.x1 + self.x2)/2, (self.x2 + self.y2)/2
 
     def x_in_range(self, x, strict=True):
 
@@ -51,6 +55,36 @@ class Triangle():
     def point_in(self, i):
         return i in [self.i1, self.i2, self.i3]
 
+    @property
+    def center(self):
+        """
+        Returns the central coordinate of the triangle
+
+        Find the intersection of two lines from corner to midpoint of opposite side
+        """
+
+        # The midpoint between point 1 and 2 (and 1 and 3 respectively)
+        mp12 = Line(
+            self.i1, self.x1, self.y1, self.i2,
+            self.x2, self.y2
+        ).mid_point
+        mp13 = Line(
+            self.i1, self.x1, self.y1, self.i3,
+            self.x3, self.y3
+        ).mid_point
+
+        # create lines from the midpoints to the opposite corners
+        # the line for corner 3
+        l3 = Line(self.i3, self.x3, self.y3, -1, *mp12)
+        l2 = Line(self.i2, self.x2, self.y2, -1, *mp13)
+
+        center_x, center_y = intersection(l2, l3)
+
+        if center_x is None:
+            raise RuntimeError("Something has gone very wrong")
+
+        return center_x, center_y
+
 
 def intersection(l1, l2):
     """
@@ -62,10 +96,10 @@ def intersection(l1, l2):
         return False
     else:
         # Find the intersection point if they were both infinite lines
-        ix = (l1.intersect - l2.intersect) / (l2.gradient - l1.gradient)
+        ix = (l1.intercept - l2.intercept) / (l2.gradient - l1.gradient)
 
         # is the point of intersection on the actual line?
         if l1.x_in_range(ix) and l2.x_in_range(ix):
-            return True
+            return ix, l1.intercept + (ix * l1.gradient)
         else:
-            return False
+            return None, None
