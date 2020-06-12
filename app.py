@@ -2,9 +2,11 @@ import pdb
 import numpy as np
 import matplotlib.pyplot as plt
 from triangulation.utils import Line, Triangle, intersection
+from matplotlib.patches import Polygon
+from matplotlib.collections import PatchCollection
 
 random_seed = 420
-num_points = 5
+num_points = 50
 
 np.random.seed(random_seed)
 
@@ -41,7 +43,8 @@ for i, (d, x, y) in enumerate(dist_table[dist_order]):
 
     # check if it intersects with any of the previous lines
     for l in lines:
-        if intersection(l, tmp_line):
+        ix, iy = intersection(l, tmp_line)
+        if ix is not None:
 
             # if it does then we don't want to add it
             add = False
@@ -51,11 +54,6 @@ for i, (d, x, y) in enumerate(dist_table[dist_order]):
     # if it passed add the line
     if add:
         lines.append(tmp_line)
-
-print("LINES")
-for l in lines:
-    print(l.i1, l.i2)
-
 
 triangles = []
 # find triangles
@@ -95,16 +93,35 @@ for i, p in enumerate(points):
 
 fig, ax = plt.subplots()
 
-ax.scatter(points[:, 0], points[:, 1])
+# ax.scatter(points[:, 0], points[:, 1])
 
-for i, p in enumerate(points):
-    ax.annotate(i, (p[0], p[1]))
+# for i, p in enumerate(points):
+#     ax.annotate(i, (p[0], p[1]))
 
-for l in lines:
-    ax.plot([l.x1, l.x2], [l.y1, l.y2])
+# for l in lines:
+#     ax.plot([l.x1, l.x2], [l.y1, l.y2])
 
-print("Triangles")
+# print("LINES")
+# for l in lines:
+#     print(l.i1, l.i2)
+
+# print("Triangles")
+# for t in triangles:
+#     print(t.i1, t.i2, t.i3)
+
+patches = []
+centers = []
 for t in triangles:
-    print(t.i1, t.i2, t.i3)
+    c_x, c_y = t.center
+    centers.append([c_x, c_y])
 
+    p = Polygon(t.to_plot, color=(c_x, 0, 0))
+    patches.append(p)
+
+
+# add the triangles to a patch collection and add it to the axes
+p = PatchCollection(patches, match_original=True)
+ax.add_collection(p)
+
+plt.axis('off')
 plt.show()
