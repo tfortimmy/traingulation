@@ -25,7 +25,7 @@ class Line():
 
     @property
     def mid_point(self):
-        return (self.x1 + self.x2)/2, (self.x2 + self.y2)/2
+        return (self.x1 + self.x2)/2, (self.y1 + self.y2)/2
 
     def x_in_range(self, x, strict=True):
 
