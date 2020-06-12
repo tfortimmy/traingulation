@@ -3,7 +3,8 @@ import numpy as np
 
 class Line():
 
-    def __init__(self, x1, y1, x2, y2):
+    def __init__(self, i1, x1, y1, i2, x2, y2):
+        self.i1, self.i2 = i1, i2
         self.x1, self.y1, self.x2, self.y2 = x1, y1, x2, y2
 
     @property
@@ -17,6 +18,10 @@ class Line():
     @property
     def intersect(self):
         return self.y1 - (self.gradient * self.x1)
+
+    @property
+    def to_plot(self):
+        return [self.x1, self.x2], [self.y1, self.y2]
 
     def x_in_range(self, x, strict=True):
 
@@ -32,6 +37,9 @@ class Line():
         else:
             # otherwise allow it
             return in_bounds or is_close
+
+    def point_in(self, i):
+        return i in [self.i1, self.i2]
 
 
 def intersection(l1, l2):
