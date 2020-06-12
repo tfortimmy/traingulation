@@ -85,6 +85,14 @@ class Triangle():
 
         return center_x, center_y
 
+    @property
+    def to_plot(self):
+        return [
+            [self.x1, self.y1],
+            [self.x2, self.y2],
+            [self.x3, self.y3],
+        ]
+
 
 def intersection(l1, l2):
     """
