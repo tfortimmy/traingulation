@@ -1,5 +1,5 @@
 from unittest import TestCase
-from triangulation.utils import Line, intersection
+from triangulation.utils import Line, intersection, Triangle
 
 
 class TestIntersection(TestCase):
@@ -7,16 +7,16 @@ class TestIntersection(TestCase):
     def test_parallel(self):
         self.assertFalse(
             intersection(
-                Line(0, 0, 1, 1),
-                Line(0, 0, 1, 1)
+                Line(0, 0, 0, 1, 1, 1),
+                Line(0, 0, 0, 1, 1, 1)
             )
         )
 
     def test_orthogonal(self):
         self.assertTrue(
             intersection(
-                Line(-1, -1, 1, 1),
-                Line(-1, 1, 1, -1)
+                Line(0, -1, -1, 1, 1, 1),
+                Line(0, -1, 1, 1, 1, -1)
             )
         )
 
@@ -28,7 +28,7 @@ class TestIntersection(TestCase):
 
         self.assertFalse(
             intersection(
-                Line(*p2, *p4),
-                Line(*p2, *p3)
+                Line(2, *p2, 4, *p4),
+                Line(2, *p2, 3, *p3)
             )
         )
