@@ -6,7 +6,7 @@ from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
 
 random_seed = 420
-num_points = 50
+num_points = 30
 
 np.random.seed(random_seed)
 
@@ -115,7 +115,7 @@ for t in triangles:
     c_x, c_y = t.center
     centers.append([c_x, c_y])
 
-    p = Polygon(t.to_plot, color=(c_x, 0, 0))
+    p = Polygon(t.to_plot, color=(c_x, 0, c_y))
     patches.append(p)
 
 
