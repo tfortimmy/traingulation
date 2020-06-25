@@ -99,9 +99,17 @@ def intersection(l1, l2):
     Do these lines intersect
     """
 
+    # if the x values don't overlap return no
+    if max(l1.x1, l1.x2) < min(l2.x1, l2.x2) or \
+            min(l1.x1, l1.x2) > max(l2.x1, l2.x2):
+        return None, None
+    # if the y values don't overlap return no
+    elif max(l1.y1, l1.y2) < min(l2.y1, l2.y2) or \
+            min(l1.y1, l1.y2) > max(l2.y1, l2.y2):
+        return None, None
     # If the gradients are the same then we assume they do not intersect
-    if l1.gradient == l2.gradient:
-        return False
+    elif l1.gradient == l2.gradient:
+        return None, None
     else:
         # Find the intersection point if they were both infinite lines
         ix = (l1.intercept - l2.intercept) / (l2.gradient - l1.gradient)
