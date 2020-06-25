@@ -5,7 +5,7 @@ class Line():
 
     def __init__(self, i1, x1, y1, i2, x2, y2):
 
-        assert x1 != x2 and y1 != y2, "Cannot have a 0 length line here"
+        assert x1 != x2 or y1 != y2, f"Cannot have a 0 length line here ({i1}, {i2})"
 
         self.i1, self.i2 = i1, i2
         self.x1, self.y1, self.x2, self.y2 = x1, y1, x2, y2
