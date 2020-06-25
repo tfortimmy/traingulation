@@ -12,8 +12,15 @@ class Line():
         return np.sqrt((self.x1 - self.x2)**2 + (self.y1 - self.y2)**2)
 
     @property
+    def is_vertical(self):
+        return self.x1 == self.x2
+
+    @property
     def gradient(self):
-        return (self.y2 - self.y1)/(self.x2 - self.x1)
+        if not self.is_vertical:
+            return (self.y2 - self.y1)/(self.x2 - self.x1)
+        else:
+            return np.PINF
 
     @property
     def intercept(self):
@@ -119,6 +126,14 @@ class Triangle():
 def intersection(l1, l2):
     """
     Do these lines intersect
+
+    Returns
+    -------
+    ix: float
+    None if no intersection
+
+    iy: float
+    None if no intersection
     """
 
     # if the x values don't overlap return no
