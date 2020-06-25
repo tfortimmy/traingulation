@@ -27,10 +27,20 @@ class Line():
     def mid_point(self):
         return (self.x1 + self.x2)/2, (self.y1 + self.y2)/2
 
+    @property
+    def ordered_x(self):
+        """Min and max X values for the line"""
+        return sorted([self.x1, self.x2])
+
+    @property
+    def ordered_y(self):
+        """Min and max Y values for the line"""
+        return sorted([self.y1, self.y2])
+
     def x_in_range(self, x, strict=True):
 
         # is the value inside the range
-        in_bounds = x >= min(self.x1, self.x2) and x <= max(self.x1, self.x2)
+        in_bounds = x >= self.ordered_x[0] and x <= self.ordered_x[1]
 
         # as we are dealing with floats we get some variation so we want to be extra careful
         is_close = np.isclose(x, self.x1) or np.isclose(x, self.x2)
@@ -112,12 +122,12 @@ def intersection(l1, l2):
     """
 
     # if the x values don't overlap return no
-    if max(l1.x1, l1.x2) < min(l2.x1, l2.x2) or \
-            min(l1.x1, l1.x2) > max(l2.x1, l2.x2):
+    if l1.ordered_x[1] < l2.ordered_x[0] or \
+            l1.ordered_x[0] > l2.ordered_x[1]:
         return None, None
     # if the y values don't overlap return no
-    elif max(l1.y1, l1.y2) < min(l2.y1, l2.y2) or \
-            min(l1.y1, l1.y2) > max(l2.y1, l2.y2):
+    elif l1.ordered_y[1] < l2.ordered_y[0] or \
+            l1.ordered_y[0] > l2.ordered_y[1]:
         return None, None
     # If the gradients are the same then we assume they do not intersect
     elif l1.gradient == l2.gradient:
@@ -128,6 +138,6 @@ def intersection(l1, l2):
 
         # is the point of intersection on the actual line?
         if l1.x_in_range(ix) and l2.x_in_range(ix):
-            return ix, l1.intercept + (ix * l1.gradient)
+            return ix, l1.y_at_x(ix)
         else:
             return None, None
