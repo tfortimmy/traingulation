@@ -45,6 +45,18 @@ class Line():
     def point_in(self, i):
         return i in [self.i1, self.i2]
 
+    def y_at_x(self, x):
+        """
+        What is the value of y at a certain x value
+        """
+        return self.intercept + (x * self.gradient)
+
+    def x_at_y(self, y):
+        """
+        What is the value of x at a given y value
+        """
+        return (y - self.intercept) / self.gradient
+
 
 class Triangle():
 
