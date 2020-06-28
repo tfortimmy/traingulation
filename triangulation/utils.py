@@ -65,7 +65,7 @@ class Line():
     def y_in_range(self, y, strict=True):
 
         # is the value inside the range
-        in_bounds = y >= self.ordered_y[0] and x <= self.ordered_y[1]
+        in_bounds = y >= self.ordered_y[0] and y <= self.ordered_y[1]
 
         # as we are dealing with floats we get some variation so we want to be extra careful
         is_close = np.isclose(y, self.y1) or np.isclose(y, self.y2)
@@ -127,6 +127,12 @@ class Line():
                     return self.x1, self.y2
                 else:
                     return None, None
+            else:
+                iy = l.y_at_x(self.x1)
+                if self.y_in_range(iy) and l.y_in_range(iy):
+                    return self.x1, l.y_at_x(self.x1)
+                else:
+                    return None, None
 
         # if they are horizontal we need some special logic
         elif self.gradient == 0:
@@ -139,6 +145,12 @@ class Line():
                     return self.x1, self.y1
                 elif l.x_in_range(self.x2):
                     return self.x2, self.y1
+                else:
+                    return None, None
+            else:
+                ix = l.x_at_y(self.y1)
+                if self.x_in_range(ix) and l.x_in_range(ix):
+                    return ix, self.y1
                 else:
                     return None, None
 
