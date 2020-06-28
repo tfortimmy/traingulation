@@ -1,7 +1,7 @@
 import pdb
 import numpy as np
 import matplotlib.pyplot as plt
-from triangulation.utils import Line, Triangle, intersection
+from triangulation.utils import Line, Triangle
 from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
 
@@ -49,7 +49,7 @@ for i, (d, x, y) in enumerate(dist_table[dist_order]):
 
     # check if it intersects with any of the previous lines
     for l in lines:
-        ix, iy = intersection(l, tmp_line)
+        ix, iy = l.intersection(tmp_line)
         if ix is not None:
 
             # if it does then we don't want to add it
