@@ -134,6 +134,8 @@ class Line():
                     return self.x1, min(y_vals)
                 else:
                     return None, None
+            elif l.gradient == 0:
+                return self.x1, l.y1
             else:
                 iy = l.y_at_x(self.x1)
                 if self.y_in_range(iy) and l.y_in_range(iy):
@@ -161,6 +163,8 @@ class Line():
                     return min(x_vals), self.y1
                 else:
                     return None, None
+            elif l.is_vertical:
+                return l.x1, self.y1
             else:
                 ix = l.x_at_y(self.y1)
                 if self.x_in_range(ix) and l.x_in_range(ix):
