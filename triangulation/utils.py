@@ -117,14 +117,21 @@ class Line():
         # if they are vertical we need some special logic
         elif self.is_vertical:
             if l.is_vertical:
+                # all yvals which intersect
+                y_vals = []
+
                 if self.y_in_range(l.y1):
-                    return self.x1, l.y1
-                elif self.y_in_range(l.y2):
-                    return self.x1, l.y2
-                elif l.y_in_range(self.y1):
-                    return self.x1, self.y1
-                elif l.y_in_range(self.y2):
-                    return self.x1, self.y2
+                    y_vals.append(l.y1)
+                if self.y_in_range(l.y2):
+                    y_vals.append(l.y2)
+                if l.y_in_range(self.y1):
+                    y_vals.append(self.y1)
+                if l.y_in_range(self.y2):
+                    y_vals.append(self.y2)
+
+                # if we have any useful points return the minimum
+                if y_vals:
+                    return self.x1, min(y_vals)
                 else:
                     return None, None
             else:
@@ -137,14 +144,21 @@ class Line():
         # if they are horizontal we need some special logic
         elif self.gradient == 0:
             if l.gradient == 0:
+                # all xvals which intersect
+                x_vals = []
+
                 if self.x_in_range(l.x1):
-                    return l.x1, self.y1
-                elif self.x_in_range(l.x2):
-                    return l.x2, self.y1
-                elif l.x_in_range(self.x1):
-                    return self.x1, self.y1
-                elif l.x_in_range(self.x2):
-                    return self.x2, self.y1
+                    x_vals.append(l.x1)
+                if self.x_in_range(l.x2):
+                    x_vals.append(l.x2)
+                if l.x_in_range(self.x1):
+                    x_vals.append(self.x1)
+                if l.x_in_range(self.x2):
+                    x_vals.append(self.x2)
+
+                # if we have any useful points return the minimum
+                if x_vals:
+                    return min(x_vals), self.y1
                 else:
                     return None, None
             else:
