@@ -180,7 +180,7 @@ class Triangulation():
         ax.add_collection(p)
 
         plt.axis('off')
-        plt.tight_layout()
+        plt.tight_layout(pad=0)
         plt.show()
 
 
