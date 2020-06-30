@@ -255,8 +255,6 @@ class Colours():
         self.bottom_colour = self.check_colour(bottom_colour)
         self.top_colour = self.check_colour(top_colour)
 
-        print(self.top_colour)
-
     def interpolate(self, x, y):
 
         assert isinstance(x, float)
