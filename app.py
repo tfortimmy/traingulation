@@ -147,7 +147,7 @@ class Triangulation():
                                 )
 
     def plot(self, annotate=False):
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(num="Sexy Triangles")
 
         # ax.scatter(points[:, 0], points[:, 1])
 
@@ -180,6 +180,7 @@ class Triangulation():
         ax.add_collection(p)
 
         plt.axis('off')
+        plt.tight_layout()
         plt.show()
 
 
