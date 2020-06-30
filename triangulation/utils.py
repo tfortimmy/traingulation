@@ -239,3 +239,47 @@ class Triangle():
             [self.x2, self.y2],
             [self.x3, self.y3],
         ]
+
+
+class Colours():
+
+    def __init__(
+        self,
+        left_colour,
+        right_colour,
+        bottom_colour,
+        top_colour
+    ):
+        self.left_colour = self.check_colour(left_colour)
+        self.right_colour = self.check_colour(right_colour)
+        self.bottom_colour = self.check_colour(bottom_colour)
+        self.top_colour = self.check_colour(top_colour)
+
+        print(self.top_colour)
+
+    def interpolate(self, x, y):
+
+        assert isinstance(x, float)
+        assert isinstance(y, float)
+
+        return [
+            (
+                ((1-x) * self.left_colour[i] + x * self.right_colour[i])
+                +
+                ((1-y) * self.bottom_colour[i] + y * self.top_colour[i])
+            ) / 2
+            for i in range(3)
+        ]
+
+    def check_colour(self, value):
+
+        # confirm it is RGB
+        assert len(value) == 3, f"We need three values for RGB: {value}"
+
+        # convert so it is in the correct format
+        colour = [float(x) for x in value]
+
+        if any([x > 1 for x in colour]):
+            colour = [x / 255 for x in colour]
+
+        return colour
