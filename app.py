@@ -4,18 +4,14 @@ import matplotlib.pyplot as plt
 from triangulation.utils import Line, Triangle
 from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
-
-random_seed = 420
-num_points = 30
-
-np.random.seed(random_seed)
+import argparse
 
 
 class Triangulation():
 
-    def __init__(self, num_points, random_seed=420):
+    def __init__(self, num_points, edge_points_prop=0.2, random_seed=420):
 
-        num_edge_points = int(num_points * 0.2)
+        num_edge_points = int(num_points * edge_points_prop)
 
         self.points = Triangulation.create_points(
             num_points, num_edge_points, random_seed)
@@ -29,6 +25,8 @@ class Triangulation():
     def create_points(num_points, num_edge_points, random_seed):
 
         assert num_points > num_edge_points + 4
+
+        np.random.seed(random_seed)
 
         # remove the corner
         points = np.random.uniform(0, 1, (num_points - num_edge_points - 4, 2))
@@ -184,7 +182,19 @@ class Triangulation():
 
 
 if __name__ == "__main__":
-    app = Triangulation(30)
+
+    parser = argparse.ArgumentParser(
+        prog="Triangulation",
+        description="Make pretty triangles"
+    )
+
+    parser.add_argument('-p', '--points', type=int, default=50)
+    parser.add_argument('-e', '--edge-points', type=float, default=0.2)
+    parser.add_argument('-r', '--random-seed', type=int, default=420)
+
+    args = parser.parse_args()
+
+    app = Triangulation(args.points, args.edge_points, args.random_seed)
 
     app.run()
     app.plot()
