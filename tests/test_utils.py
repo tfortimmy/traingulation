@@ -107,3 +107,16 @@ class TestLine(TestCase):
 
         self.assertEqual(ix, 0)
         self.assertEqual(iy, 0)
+
+    def test_vertical_horizontal_adjacent(self):
+        # effectively a corner
+        v_line = Line(0, 0, 0, 1, 0, 1)
+        h_line = Line(0, 0, 0, 2, 1, 0)
+
+        ix, iy = v_line.intersection(h_line)
+        self.assertIsNone(ix)
+        self.assertIsNone(iy)
+
+        ix, iy = h_line.intersection(v_line)
+        self.assertIsNone(ix)
+        self.assertIsNone(iy)
