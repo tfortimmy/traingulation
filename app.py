@@ -1,7 +1,7 @@
 import pdb
 import numpy as np
 import matplotlib.pyplot as plt
-from triangulation.utils import Line, Triangle
+from triangulation.utils import Line, Triangle, Colours
 from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
 import argparse
@@ -9,9 +9,11 @@ import argparse
 
 class Triangulation():
 
-    def __init__(self, num_points, edge_points_prop=0.2, random_seed=420):
+    def __init__(self, colours, num_points=30, edge_points_prop=0.2, random_seed=420):
 
         num_edge_points = int(num_points * edge_points_prop)
+
+        self.colours = colours
 
         self.points = Triangulation.create_points(
             num_points, num_edge_points, random_seed)
@@ -165,12 +167,12 @@ class Triangulation():
         #     print(t.i1, t.i2, t.i3)
 
         patches = []
-        centers = []
         for t in self.triangles:
             c_x, c_y = t.center
-            centers.append([c_x, c_y])
 
-            p = Polygon(t.to_plot, color=(c_x, 0, c_y))
+            c = self.colours.interpolate(c_x, c_y)
+
+            p = Polygon(t.to_plot, color=c)
             patches.append(p)
 
         # add the triangles to a patch collection and add it to the axes
@@ -192,9 +194,30 @@ if __name__ == "__main__":
     parser.add_argument('-e', '--edge-points', type=float, default=0.2)
     parser.add_argument('-r', '--random-seed', type=int, default=420)
 
+    parser.add_argument('-lc', '--left-colour', nargs='+',
+                        default=[0, 0, 0])
+    parser.add_argument('-rc', '--right-colour', nargs='+',
+                        default=[1, 0, 0])
+    parser.add_argument('-bc', '--bottom-colour', nargs='+',
+                        default=[0, 0, 0])
+    parser.add_argument('-tc', '--top-colour', nargs='+',
+                        default=[1, 0, 0])
+
     args = parser.parse_args()
 
-    app = Triangulation(args.points, args.edge_points, args.random_seed)
+    cols = Colours(
+        args.left_colour,
+        args.right_colour,
+        args.bottom_colour,
+        args.top_colour
+    )
+
+    app = Triangulation(
+        cols,
+        args.points,
+        args.edge_points,
+        args.random_seed
+    )
 
     app.run()
     app.plot()
