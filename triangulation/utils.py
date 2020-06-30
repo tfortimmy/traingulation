@@ -16,7 +16,7 @@ class Line():
 
     @property
     def is_vertical(self):
-        return self.x1 == self.x2
+        return np.isclose(self.x1, self.x2)
 
     @property
     def gradient(self):
@@ -135,7 +135,10 @@ class Line():
                 else:
                     return None, None
             elif l.gradient == 0:
-                return self.x1, l.y1
+                if self.y_in_range(l.y1):
+                    return self.x1, l.y1
+                else:
+                    return None, None
             else:
                 iy = l.y_at_x(self.x1)
                 if self.y_in_range(iy) and l.y_in_range(iy):
@@ -164,7 +167,10 @@ class Line():
                 else:
                     return None, None
             elif l.is_vertical:
-                return l.x1, self.y1
+                if self.x_in_range(l.x1):
+                    return l.x1, self.y1
+                else:
+                    return None, None
             else:
                 ix = l.x_at_y(self.y1)
                 if self.x_in_range(ix) and l.x_in_range(ix):
