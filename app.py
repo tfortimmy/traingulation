@@ -1,7 +1,7 @@
 import pdb
 import numpy as np
 import matplotlib.pyplot as plt
-from triangulation.utils import Line, Triangle, intersection
+from triangulation.utils import Line, Triangle
 from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
 
@@ -10,7 +10,13 @@ num_points = 30
 
 np.random.seed(random_seed)
 
-points = np.random.uniform(0, 1, (num_points, 2))
+# remove the corner
+points = np.random.uniform(0, 1, (num_points - 4, 2))
+
+# add in the corner points
+corner_points = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+
+points = np.concatenate((points, corner_points), axis=0)
 
 comp = np.array([np.complex(x, y) for x, y in points])
 x, y = np.meshgrid(comp, comp)
@@ -43,7 +49,7 @@ for i, (d, x, y) in enumerate(dist_table[dist_order]):
 
     # check if it intersects with any of the previous lines
     for l in lines:
-        ix, iy = intersection(l, tmp_line)
+        ix, iy = l.intersection(tmp_line)
         if ix is not None:
 
             # if it does then we don't want to add it
