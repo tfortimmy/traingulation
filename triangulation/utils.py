@@ -239,3 +239,72 @@ class Triangle():
             [self.x2, self.y2],
             [self.x3, self.y3],
         ]
+
+
+colour_dict = {
+    'red': [1, 0, 0],
+    'r': [1, 0, 0],
+    'green': [0, 1, 0],
+    'g': [0, 1, 0],
+    'blue': [0, 0, 1],
+    'b': [0, 0, 1],
+    'white': [1, 1, 1],
+    'w': [1, 1, 1],
+    'black': [0, 0, 0],
+    'yellow': [1, 1, 0],
+    'y': [1, 1, 0],
+    'purple': [.5, 0, .5],
+    'p': [.5, 0, .5],
+    'cyan': [0, 1, 1],
+    'grey': [.5, .5, .5],
+    'maroon': [.5, 0, 0]
+}
+
+
+class Colours():
+
+    def __init__(
+        self,
+        left_colour,
+        right_colour,
+        bottom_colour,
+        top_colour
+    ):
+        self.left_colour = self.check_colour(left_colour)
+        self.right_colour = self.check_colour(right_colour)
+        self.bottom_colour = self.check_colour(bottom_colour)
+        self.top_colour = self.check_colour(top_colour)
+
+    def interpolate(self, x, y):
+
+        assert isinstance(x, float)
+        assert isinstance(y, float)
+
+        return [
+            (
+                ((1-x) * self.left_colour[i] + x * self.right_colour[i])
+                +
+                ((1-y) * self.bottom_colour[i] + y * self.top_colour[i])
+            ) / 2
+            for i in range(3)
+        ]
+
+    def check_colour(self, value):
+
+        if len(value) == 1:
+            if value[0] in colour_dict:
+                return colour_dict.get(value[0])
+            else:
+                raise ValueError(f"Unknown colour: {value[0]}")
+
+        elif len(value) == 3:
+            # convert so it is in the correct format
+            colour = [float(x) for x in value]
+
+            if any([x > 1 for x in colour]):
+                colour = [x / 255 for x in colour]
+
+            return colour
+
+        else:
+            raise ValueError(f"We need one or three values for RGB: {value}")
