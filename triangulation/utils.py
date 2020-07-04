@@ -241,6 +241,26 @@ class Triangle():
         ]
 
 
+colour_dict = {
+    'red': [1, 0, 0],
+    'r': [1, 0, 0],
+    'green': [0, 1, 0],
+    'g': [0, 1, 0],
+    'blue': [0, 0, 1],
+    'b': [0, 0, 1],
+    'white': [1, 1, 1],
+    'w': [1, 1, 1],
+    'black': [0, 0, 0],
+    'yellow': [1, 1, 0],
+    'y': [1, 1, 0],
+    'purple': [.5, 0, .5],
+    'p': [.5, 0, .5],
+    'cyan': [0, 1, 1],
+    'grey': [.5, .5, .5],
+    'maroon': [.5, 0, 0]
+}
+
+
 class Colours():
 
     def __init__(
@@ -271,13 +291,20 @@ class Colours():
 
     def check_colour(self, value):
 
-        # confirm it is RGB
-        assert len(value) == 3, f"We need three values for RGB: {value}"
+        if len(value) == 1:
+            if value[0] in colour_dict:
+                return colour_dict.get(value[0])
+            else:
+                raise ValueError(f"Unknown colour: {value[0]}")
 
-        # convert so it is in the correct format
-        colour = [float(x) for x in value]
+        elif len(value) == 3:
+            # convert so it is in the correct format
+            colour = [float(x) for x in value]
 
-        if any([x > 1 for x in colour]):
-            colour = [x / 255 for x in colour]
+            if any([x > 1 for x in colour]):
+                colour = [x / 255 for x in colour]
 
-        return colour
+            return colour
+
+        else:
+            raise ValueError(f"We need one or three values for RGB: {value}")
