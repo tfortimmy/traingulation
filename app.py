@@ -191,18 +191,32 @@ if __name__ == "__main__":
         description="Make pretty triangles"
     )
 
-    parser.add_argument('-p', '--points', type=int, default=50)
-    parser.add_argument('-e', '--edge-points', type=float, default=0.2)
-    parser.add_argument('-r', '--random-seed', type=int, default=420)
+    parser.add_argument('-p', '--points', type=int, default=50,
+                        help="The number of points for to be created (default=50)"
+                        )
+    parser.add_argument('-e', '--edge-points', type=float, default=0.2,
+                        help="The proportion of points located on the edge (default=0.2)"
+                        )
+    parser.add_argument('-r', '--random-seed', type=int, default=420,
+                        help="The random seed to be used"
+                        )
 
     parser.add_argument('-lc', '--left-colour', nargs='+',
-                        default=[0, 0, 0])
+                        default=[1, 1, 1],
+                        help="The colour associated with the left hand side (default=white)"
+                        )
     parser.add_argument('-rc', '--right-colour', nargs='+',
-                        default=[1, 0, 0])
+                        default=[1, 0, 0],
+                        help="The colour associated with the right hand side (default=red)"
+                        )
     parser.add_argument('-bc', '--bottom-colour', nargs='+',
-                        default=[0, 0, 0])
+                        default=[1, 1, 1],
+                        help="The colour associated with the bottom (default=white)"
+                        )
     parser.add_argument('-tc', '--top-colour', nargs='+',
-                        default=[1, 0, 0])
+                        default=[1, 0, 0],
+                        help="The colour associated with the top (default=red)"
+                        )
 
     args = parser.parse_args()
 
